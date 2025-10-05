@@ -4,6 +4,8 @@ import { useCallback } from "react";
 import { renderToString } from "react-dom/server";
 import { HtecLogo } from "../Navbar/HtecLogo";
 import type { FormData } from "./ResumeTailoringTool";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
 
 type ExportDocProps = {
   formData: any; // Replace with specific type if available
@@ -26,7 +28,9 @@ function PrintableDocument({ formData }: { formData: FormData }) {
         </div>
       </div>
 
-      <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">Personal Information</h1>
+      <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">
+        Personal Information
+      </h1>
       <div className="flex flex-col gap-2">
         {[
           {
@@ -54,12 +58,16 @@ function PrintableDocument({ formData }: { formData: FormData }) {
 
       {formData.brief && formData.brief.trim() !== "" && (
         <>
-          <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">Brief</h1>
+          <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">
+            Brief
+          </h1>
           <p>{formData.brief}</p>
         </>
       )}
 
-      <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">Professional Skills</h1>
+      <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">
+        Professional Skills
+      </h1>
       <div className="flex flex-col gap-2">
         {formData.professionalSkills?.coreLanguages &&
           formData.professionalSkills.coreLanguages.trim() !== "" && (
@@ -117,7 +125,9 @@ function PrintableDocument({ formData }: { formData: FormData }) {
 
       {formData.relevantProjects?.length > 0 && (
         <>
-          <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">Relevant Projects</h1>
+          <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">
+            Relevant Projects
+          </h1>
           {formData.relevantProjects.map(
             (
               proj: {
@@ -180,11 +190,7 @@ function PrintableDocument({ formData }: { formData: FormData }) {
   );
 }
 
-export function ExportDocument({
-  formData,
-  contactName,
-  jobTitle,
-}: ExportDocProps) {
+export function ExportDocument({ formData, contactName }: ExportDocProps) {
   const handlePrint = useCallback(() => {
     if (!formData) return;
 
@@ -195,39 +201,55 @@ export function ExportDocument({
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
 
-    printWindow.document.write(`
+    const doc = printWindow.document;
+
+    doc.open();
+
+    const fullHTML = `
+      <!DOCTYPE html>
       <html>
         <head>
           <title>${contactName || "Resume"}</title>
           <script src="https://cdn.tailwindcss.com"></script>
           <style>
-            /* Force background colors to print */
             * {
               -webkit-print-color-adjust: exact !important;
               color-adjust: exact !important;
             }
           </style>
+          <script>
+            // Wait for Tailwind to initialize, then print
+            window.addEventListener('load', () => {
+              if (window.tailwind && window.tailwind.init) {
+                window.tailwind.init().then(() => {
+                  window.focus();
+                  window.print();
+                });
+              } else {
+                // Fallback if tailwind.init doesn't exist
+                window.focus();
+                window.print();
+              }
+            });
+          </script>
         </head>
         <body class="p-6 max-w-3xl mx-auto">
           ${htmlContent}
         </body>
       </html>
-    `);
+    `;
 
-    printWindow.document.close();
-
-    printWindow.onload = () => {
-      printWindow.focus();
-      printWindow.print();
-    };
+    doc.write(fullHTML);
+    doc.close();
   }, [formData, contactName]);
 
   return (
-    <button
+    <Button
       onClick={handlePrint}
-      className="bg-primary text-primary-foreground px-6 py-2 rounded-md hover:bg-primary/90 transition"
+      className="w-full shadow-md h-10"
     >
+      <Download />
       Export as PDF / Print
-    </button>
+    </Button>
   );
 }

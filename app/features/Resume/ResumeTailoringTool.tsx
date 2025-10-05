@@ -577,11 +577,11 @@ export default function ResumeTailoringTool() {
               className="shadow-md rounded-lg border border-gray-200"
             >
               <AccordionItem value="item-1">
-                <AccordionTrigger className="text-lg font-semibold text-gray-700 hover:bg-gray-100 rounded-md px-4 py-2 transition">
+                <AccordionTrigger className="text-md font-semibold text-gray-700 hover:bg-gray-100 rounded-md px-4 py-2 transition">
                   Preview JSON
                 </AccordionTrigger>
                 <AccordionContent>
-                  <pre className="text-xs h-fit bg-gray-100 p-4 mt-4 rounded-lg overflow-x-auto">
+                  <pre className="text-xs h-fit break-words p-4 rounded-lg overflow-auto">
                     {JSON.stringify(form.watch(), null, 2)}
                   </pre>
                 </AccordionContent>
