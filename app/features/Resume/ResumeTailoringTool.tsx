@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 const cvSchema = z.object({
   personalInformation: z.object({
@@ -502,7 +503,7 @@ export default function ResumeTailoringTool() {
                               Project Description
                             </FormLabel>
                             <FormControl>
-                              <Input
+                              <Textarea
                                 {...field}
                                 className="rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
                               />
@@ -536,7 +537,7 @@ export default function ResumeTailoringTool() {
                               Role and Responsibilities
                             </FormLabel>
                             <FormControl>
-                              <Input
+                              <Textarea
                                 {...field}
                                 className="rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-transparent transition"
                               />
