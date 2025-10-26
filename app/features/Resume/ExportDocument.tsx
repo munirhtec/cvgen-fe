@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback } from "react";
 import { renderToString } from "react-dom/server";
 import { HtecLogo } from "../Navbar/HtecLogo";
@@ -142,17 +140,17 @@ function PrintableDocument({ formData }: { formData: FormData }) {
                 <tbody>
                   {proj.businessDomain && (
                     <tr>
-                      <td className="font-semibold bg-blue-100 border border-gray-300 px-2 py-1 w-32">
+                      <td className="w-1/4 font-semibold bg-blue-100 border border-gray-300 px-2 py-1">
                         Domain
                       </td>
-                      <td className="border border-gray-300 px-2 py-1">
+                      <td className="border border-gray-300 px-2 py-1 whitespace-pre-line">
                         {proj.businessDomain}
                       </td>
                     </tr>
                   )}
                   {proj.projectDescription && (
                     <tr>
-                      <td className="font-semibold bg-blue-100 border border-gray-300 px-2 py-1">
+                      <td className="w-1/4 font-semibold bg-blue-100 border border-gray-300 px-2 py-1">
                         Description
                       </td>
                       <td className="border border-gray-300 px-2 py-1">
@@ -162,20 +160,20 @@ function PrintableDocument({ formData }: { formData: FormData }) {
                   )}
                   {proj.techStack && (
                     <tr>
-                      <td className="font-semibold bg-blue-100 border border-gray-300 px-2 py-1">
+                      <td className="w-1/4 font-semibold bg-blue-100 border border-gray-300 px-2 py-1">
                         Tech Stack
                       </td>
-                      <td className="border border-gray-300 px-2 py-1">
+                      <td className="border border-gray-300 px-2 py-1 whitespace-pre-line">
                         {proj.techStack}
                       </td>
                     </tr>
                   )}
                   {proj.roleAndResponsibilities && (
                     <tr>
-                      <td className="font-semibold bg-blue-100 border border-gray-300 px-2 py-1">
+                      <td className="w-1/4 font-semibold bg-blue-100 border border-gray-300 px-2 py-1">
                         Role
                       </td>
-                      <td className="border border-gray-300 px-2 py-1">
+                      <td className="border border-gray-300 px-2 py-1 whitespace-pre-line">
                         {proj.roleAndResponsibilities}
                       </td>
                     </tr>
@@ -196,7 +194,7 @@ export function ExportDocument({ formData, contactName }: ExportDocProps) {
 
     const htmlContent = renderToString(
       <PrintableDocument formData={formData} />
-    );
+    ).replace(/\n/g, "<br/>");
 
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
@@ -218,7 +216,6 @@ export function ExportDocument({ formData, contactName }: ExportDocProps) {
             }
           </style>
           <script>
-            // Wait for Tailwind to initialize, then print
             window.addEventListener('load', () => {
               if (window.tailwind && window.tailwind.init) {
                 window.tailwind.init().then(() => {
@@ -226,7 +223,6 @@ export function ExportDocument({ formData, contactName }: ExportDocProps) {
                   window.print();
                 });
               } else {
-                // Fallback if tailwind.init doesn't exist
                 window.focus();
                 window.print();
               }
@@ -244,10 +240,7 @@ export function ExportDocument({ formData, contactName }: ExportDocProps) {
   }, [formData, contactName]);
 
   return (
-    <Button
-      onClick={handlePrint}
-      className="w-full shadow-md h-10"
-    >
+    <Button onClick={handlePrint} className="w-full shadow-md h-10">
       <Download />
       Export as PDF / Print
     </Button>
