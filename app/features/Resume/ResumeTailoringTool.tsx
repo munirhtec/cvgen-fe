@@ -128,15 +128,8 @@ export default function ResumeTailoringTool() {
     remove: removeProject,
   } = useFieldArray({ control: form.control, name: "relevantProjects" });
 
-  const toggleSection = (section) =>
-    setSections((prev) => ({ ...prev, [section]: !prev[section] }));
-
-  const handleResumeUpload = async (file) => {
+  const handleResumeUpload = async (file: unknown) => {
     console.log("Resume upload:", file);
-  };
-
-  const handleJobDescriptionSubmit = async (desc, url) => {
-    console.log("Job description submit:", desc, url);
   };
 
   const handleTailorResume = async () => {
@@ -596,7 +589,6 @@ export default function ResumeTailoringTool() {
                 hasResume={!!originalCV}
               />
               <JobDescriptionInput
-                onSubmit={handleJobDescriptionSubmit}
                 isProcessing={isProcessing}
                 hasJobDescription={!!jobRequirements}
                 className="mt-6"
