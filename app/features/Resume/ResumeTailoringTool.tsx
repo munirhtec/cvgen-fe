@@ -64,7 +64,7 @@ export type FormData = z.infer<typeof cvSchema>;
 
 const emptyCV = {
   personalInformation: {
-    fullName: "",
+    full_name: "",
     position: "",
     education: "",
     email: "",

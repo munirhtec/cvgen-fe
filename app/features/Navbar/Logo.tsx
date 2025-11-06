@@ -9,16 +9,15 @@ export function Logo() {
       className="group select-none"
       aria-label="Engineer CV Generator Home"
     >
-      <div className="flex items-center space-x-3 text-gray-300 group-hover:text-indigo-400 transition-colors duration-300">
+      <div className="flex items-center space-x-3 text-gray-800 transition-colors duration-300">
         <FileUser className="w-7 h-7" />
-
         <div className="flex flex-col leading-tight">
           <span className="text-md tracking-wide leading-none font-semibold">
             Engineer CV Generator
           </span>
-          <span className="flex items-center text-sm tracking-wide leading-none mt-0.5 text-gray-400 group-hover:text-indigo-300">
+          <span className="flex items-center text-xs tracking-wide leading-none mt-0.5 text-gray-400">
             by&nbsp;
-            <span className="origin-left scale-50 inline-block">
+            <span className="origin-left scale-40 inline-block">
               <HtecLogo />
             </span>
           </span>

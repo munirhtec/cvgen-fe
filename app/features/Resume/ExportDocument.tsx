@@ -1,22 +1,17 @@
 import { useCallback } from "react";
 import { renderToString } from "react-dom/server";
-import { HtecLogo } from "../Navbar/HtecLogo";
-import type { FormData } from "./ResumeTailoringTool";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
+import type { CVDraft } from "@/lib/cv";
+import { HtecLogo } from "../Navbar/HtecLogo";
 
-type ExportDocProps = {
-  formData: any; // Replace with specific type if available
-  contactName: string;
-  jobTitle: string;
-};
+function PrintableCVDraft({ draft }: { draft: CVDraft }) {
+  const cv = draft.cv;
 
-function PrintableDocument({ formData }: { formData: FormData }) {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex items-center space-x-4 text-gray-400">
         <HtecLogo />
-
         <div className="pl-4 border-l border-gray-300">
           <div className="uppercase leading-tight text-xs">
             <div>TEAM</div>
@@ -26,113 +21,91 @@ function PrintableDocument({ formData }: { formData: FormData }) {
         </div>
       </div>
 
-      <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">
+      <h2 className="text-2xl font-semibold border-b border-gray-300 w-full">
         Personal Information
-      </h1>
+      </h2>
       <div className="flex flex-col gap-2">
         {[
           {
             label: "Full Name:",
-            value: formData.personalInformation?.fullName,
+            value: cv.personalInformation.fullName,
           },
-          { label: "Position:", value: formData.personalInformation?.position },
+          {
+            label: "Position:",
+            value: cv.personalInformation.position.join(", "),
+          },
+          {
+            label: "Email:",
+            value: cv.personalInformation.email,
+          },
           {
             label: "Education:",
-            value: formData.personalInformation?.education,
-          },
-          {
-            label: "Contact Email:",
-            value: formData.personalInformation?.email,
+            value: cv.personalInformation.education,
           },
         ]
           .filter(({ value }) => value && value.trim() !== "")
           .map(({ label, value }) => (
             <div key={label} className="flex">
-              <div className="font-bold w-32">{label}</div>
+              <div className="font-bold w-40">{label}</div>
               <div>{value}</div>
             </div>
           ))}
       </div>
 
-      {formData.brief && formData.brief.trim() !== "" && (
+      {cv.brief && cv.brief.trim() !== "" && (
         <>
-          <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">
-            Brief
-          </h1>
-          <p>{formData.brief}</p>
+          <h2 className="text-2xl font-semibold border-b border-gray-300 w-full">
+            Summary
+          </h2>
+          <p>{cv.brief}</p>
         </>
       )}
 
-      <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">
+      <h2 className="text-2xl font-semibold border-b border-gray-300 w-full">
         Professional Skills
-      </h1>
-      <div className="flex flex-col gap-2">
-        {formData.professionalSkills?.coreLanguages &&
-          formData.professionalSkills.coreLanguages.trim() !== "" && (
-            <div className="flex gap-2">
-              <div className="font-bold">Core programming languages:</div>
-              <div>{formData.professionalSkills.coreLanguages}</div>
-            </div>
-          )}
-        {formData.professionalSkills?.frameworksAndTools &&
-          formData.professionalSkills.frameworksAndTools.trim() !== "" && (
-            <div className="flex gap-2">
-              <div className="font-bold">Software tools/Frameworks:</div>
-              <div>{formData.professionalSkills.frameworksAndTools}</div>
-            </div>
-          )}
+      </h2>
+      <div>
+        <div className="font-semibold">Core Languages:</div>
+        <ul className="list-disc list-inside mb-2">
+          {cv.professionalSkills.coreLanguages.map((s, i) => (
+            <li key={i}>{s}</li>
+          ))}
+        </ul>
+        <div className="font-semibold">Frameworks & Tools:</div>
+        <ul className="list-disc list-inside">
+          {cv.professionalSkills.frameworksAndTools.map((s, i) => (
+            <li key={i}>{s}</li>
+          ))}
+        </ul>
       </div>
 
-      <div className="flex space-x-6">
-        {formData.languages &&
-          formData.languages.some(
-            (lang: { language?: string; level?: string }) =>
-              lang.language?.trim() !== "" && lang.level?.trim() !== ""
-          ) && (
-            <div className="w-1/2">
-              <h1 className="text-xl font-semibold mb-2">Languages</h1>
-              <ul className="flex flex-col gap-2">
-                {formData.languages
-                  .filter(
-                    (lang: { language?: string; level?: string }) =>
-                      lang.language?.trim() !== "" && lang.level?.trim() !== ""
-                  )
-                  .map(
-                    (
-                      lang: { language: string; level: string },
-                      idx: number
-                    ) => (
-                      <li key={idx}>
-                        {lang.language} ({lang.level})
-                      </li>
-                    )
-                  )}
-              </ul>
-            </div>
-          )}
-
-        {formData.hobbies?.length > 0 && (
-          <div className="w-1/2">
-            <h1 className="text-xl font-semibold mb-2">Hobbies</h1>
-            <ul>
-              <li>{formData.hobbies.join(", ")}</li>
-            </ul>
-          </div>
-        )}
-      </div>
-
-      {formData.relevantProjects?.length > 0 && (
+      {cv.languages.length > 0 && (
         <>
-          <h1 className="text-2xl font-semibold border-b border-gray-300 w-full">
+          <h2 className="text-2xl font-semibold border-b border-gray-300 w-full">
+            Languages
+          </h2>
+          <ul className="list-disc list-inside">
+            {cv.languages.map((l, i) => (
+              <li key={i}>
+                {l.language} - {l.level}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {cv.relevantProjects.length > 0 && (
+        <>
+          <h2 className="text-2xl font-semibold border-b border-gray-300 w-full">
             Relevant Projects
-          </h1>
-          {formData.relevantProjects.map(
+          </h2>
+          {cv.relevantProjects.map(
             (
               proj: {
                 businessDomain: string;
                 projectDescription: string;
-                techStack: string;
-                roleAndResponsibilities: string;
+                techStack: string[];
+                roleAndResponsibilities: string[];
               },
               idx: number
             ) => (
@@ -158,23 +131,23 @@ function PrintableDocument({ formData }: { formData: FormData }) {
                       </td>
                     </tr>
                   )}
-                  {proj.techStack && (
+                  {proj.techStack?.length > 0 && (
                     <tr>
                       <td className="w-1/4 font-semibold bg-blue-100 border border-gray-300 px-2 py-1">
                         Tech Stack
                       </td>
                       <td className="border border-gray-300 px-2 py-1 whitespace-pre-line">
-                        {proj.techStack}
+                        {proj.techStack.join(", ")}
                       </td>
                     </tr>
                   )}
-                  {proj.roleAndResponsibilities && (
+                  {proj.roleAndResponsibilities?.length > 0 && (
                     <tr>
                       <td className="w-1/4 font-semibold bg-blue-100 border border-gray-300 px-2 py-1">
                         Role
                       </td>
                       <td className="border border-gray-300 px-2 py-1 whitespace-pre-line">
-                        {proj.roleAndResponsibilities}
+                        {proj.roleAndResponsibilities.join("\n")}
                       </td>
                     </tr>
                   )}
@@ -184,30 +157,44 @@ function PrintableDocument({ formData }: { formData: FormData }) {
           )}
         </>
       )}
+
+      {cv.hobbies.length > 0 && (
+        <>
+          <h2 className="text-2xl font-semibold border-b border-gray-300 w-full">
+            Hobbies
+          </h2>
+          <ul className="list-disc list-inside">
+            {cv.hobbies.map((h, i) => (
+              <li key={i}>{h}</li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      <div className="text-gray-400 text-sm mt-4">
+        Generated using CVGen, AI CV Assistant from HTEC
+      </div>
     </div>
   );
 }
 
-export function ExportDocument({ formData, contactName }: ExportDocProps) {
+export function ExportCVDraft({ draft }: { draft: CVDraft }) {
   const handlePrint = useCallback(() => {
-    if (!formData) return;
+    if (!draft) return;
 
-    const htmlContent = renderToString(
-      <PrintableDocument formData={formData} />
-    ).replace(/\n/g, "<br/>");
+    const htmlContent = renderToString(<PrintableCVDraft draft={draft} />);
 
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
 
     const doc = printWindow.document;
-
     doc.open();
 
     const fullHTML = `
       <!DOCTYPE html>
       <html>
         <head>
-          <title>${contactName || "Resume"}</title>
+          <title>${draft.cv.personalInformation.fullName || "CV Draft"}</title>
           <script src="https://cdn.tailwindcss.com"></script>
           <style>
             * {
@@ -217,15 +204,8 @@ export function ExportDocument({ formData, contactName }: ExportDocProps) {
           </style>
           <script>
             window.addEventListener('load', () => {
-              if (window.tailwind && window.tailwind.init) {
-                window.tailwind.init().then(() => {
-                  window.focus();
-                  window.print();
-                });
-              } else {
-                window.focus();
-                window.print();
-              }
+              window.focus();
+              window.print();
             });
           </script>
         </head>
@@ -237,10 +217,14 @@ export function ExportDocument({ formData, contactName }: ExportDocProps) {
 
     doc.write(fullHTML);
     doc.close();
-  }, [formData, contactName]);
+  }, [draft]);
 
   return (
-    <Button onClick={handlePrint} className="w-full shadow-md h-10">
+    <Button
+      onClick={handlePrint}
+      className="shadow-md h-10 flex items-center gap-2"
+      disabled={!draft}
+    >
       <Download />
       Export as PDF / Print
     </Button>
