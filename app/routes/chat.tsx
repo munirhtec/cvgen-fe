@@ -162,7 +162,8 @@ export default function CVChat() {
       <main className="flex-1 w-full py-8">
         {draft ? (
           <div className="relative bg-white max-w-5xl mx-auto border border-gray-100 shadow-xl p-6 space-y-6">
-            <button
+            <Button
+              variant="ghost"
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
               onClick={() => {
                 setResetMode("close");
@@ -170,7 +171,7 @@ export default function CVChat() {
               }}
             >
               <X size={20} />
-            </button>
+            </Button>
 
             <div className="flex items-center space-x-4 text-gray-400">
               <HtecLogo />
@@ -335,8 +336,8 @@ export default function CVChat() {
       </main>
 
       <div
-        className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl flex gap-2 bg-white/80 backdrop-blur-sm border rounded-full shadow-md p-2 transition-all ${
-          isInputFocused ? "ring-2 ring-blue-500" : "ring ring-gray-200"
+        className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl flex gap-2 bg-white/30 backdrop-blur-md ring rounded-full shadow-md p-2 transition-all ${
+          isInputFocused ? "ring-2 ring-blue-500" : "ring ring-gray-300"
         }`}
       >
         <Input
@@ -374,12 +375,12 @@ export default function CVChat() {
         </Button>
       </div>
 
-      <div className="fixed bottom-20 right-6 flex gap-3">
+      <div className="fixed flex flex-col justify-end bottom-20 right-6 gap-3">
         <ExportCVDraft draft={draft!} />
         {showResetButton && (
           <Button
             variant="destructive"
-            className="rounded-full h-11 px-4 shadow-lg"
+            className="rounded-full h-12 px-4 shadow-lg"
             onClick={() => {
               setResetMode("fab");
               setIsResetModalOpen(true);

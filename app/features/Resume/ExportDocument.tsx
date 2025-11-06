@@ -222,7 +222,7 @@ export function ExportCVDraft({ draft }: { draft: CVDraft }) {
   return (
     <Button
       onClick={handlePrint}
-      className="shadow-md h-10 flex items-center gap-2"
+      className="shadow-md h-12 rounded-full flex items-center gap-2"
       disabled={!draft}
     >
       <Download />
