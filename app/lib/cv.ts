@@ -37,7 +37,8 @@ export interface CVDraft {
     }[];
     hobbies: string[];
   };
-  feedback: string[];
+  feedbackHistory: string[];
+  lastFeedback: string;
 }
 
 export const startDraftAPI = async (query: string) => {

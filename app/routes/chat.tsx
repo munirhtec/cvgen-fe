@@ -125,23 +125,23 @@ export default function CVChat() {
     }
   };
 
-  const showResetButton = draft && draft.feedback.length > 0;
+  const showResetButton = draft && draft.feedbackHistory.length > 0;
 
   return (
     <div className="min-h-fit flex flex-col relative">
       {/* Feedback Button */}
-      {draft?.feedback.length > 0 && (
+      {draft && draft?.feedbackHistory && draft?.feedbackHistory.length > 0 && (
         <div className="fixed top-24 left-6 z-40">
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm" className="gap-2 shadow-sm">
-                Feedback ({draft.feedback.length})
+                Feedback ({draft.feedbackHistory.length})
                 <ChevronDown className="w-4 h-4" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-64 p-2 text-sm">
               <ul className="space-y-1 text-gray-700 max-h-48 overflow-y-auto">
-                {draft.feedback.map((fb, i) => (
+                {draft.feedbackHistory.map((fb, i) => (
                   <li key={i} className="border-b border-gray-100 pb-1 last:border-0">
                     {fb}
                   </li>
