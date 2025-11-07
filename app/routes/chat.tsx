@@ -72,13 +72,8 @@ export default function CVChat() {
   });
 
   const submitFeedbackMutation = useMutation({
-    mutationFn: ({
-      employee_id,
-      feedback,
-    }: {
-      employee_id: string;
-      feedback: string;
-    }) => submitFeedbackAPI(employee_id, feedback),
+    mutationFn: ({ employee_id, feedback }: { employee_id: string; feedback: string }) =>
+      submitFeedbackAPI(employee_id, feedback),
     onSuccess: (data) => {
       setDraft(data.draft);
       setFeedbackInput("");
@@ -134,6 +129,7 @@ export default function CVChat() {
 
   return (
     <div className="min-h-fit flex flex-col relative">
+      {/* Feedback Button */}
       {draft?.feedback.length > 0 && (
         <div className="fixed top-24 left-6 z-40">
           <Popover>
@@ -146,11 +142,8 @@ export default function CVChat() {
             <PopoverContent className="w-64 p-2 text-sm">
               <ul className="space-y-1 text-gray-700 max-h-48 overflow-y-auto">
                 {draft.feedback.map((fb, i) => (
-                  <li
-                    key={i}
-                    className="border-b border-gray-100 pb-1 last:border-0"
-                  >
-                    {typeof fb === "string" ? fb : JSON.stringify(fb)}
+                  <li key={i} className="border-b border-gray-100 pb-1 last:border-0">
+                    {fb}
                   </li>
                 ))}
               </ul>
@@ -160,6 +153,7 @@ export default function CVChat() {
       )}
 
       <main className="flex-1 w-full py-8">
+        {/* CV View */}
         {draft ? (
           <div className="relative bg-white max-w-5xl mx-auto border border-gray-100 shadow-xl p-6 space-y-6">
             <Button
@@ -188,21 +182,19 @@ export default function CVChat() {
               Personal Information
             </h2>
             <div className="flex flex-col gap-2">
-              {[
-                {
-                  label: "Full Name:",
-                  value: draft.cv.personalInformation.fullName,
-                },
-                {
-                  label: "Position:",
-                  value: draft.cv.personalInformation.position.join(", "),
-                },
-                { label: "Email:", value: draft.cv.personalInformation.email },
-                {
-                  label: "Education:",
-                  value: draft.cv.personalInformation.education,
-                },
-              ]
+              {[{
+                label: "Full Name:",
+                value: draft.cv.personalInformation.fullName,
+              }, {
+                label: "Position:",
+                value: draft.cv.personalInformation.position.join(", "),
+              }, {
+                label: "Email:",
+                value: draft.cv.personalInformation.email,
+              }, {
+                label: "Education:",
+                value: draft.cv.personalInformation.education,
+              }]
                 .filter(({ value }) => value && value.trim() !== "")
                 .map(({ label, value }) => (
                   <div key={label} className="flex">
@@ -212,6 +204,7 @@ export default function CVChat() {
                 ))}
             </div>
 
+            {/* CV Summary */}
             {draft.cv.brief && draft.cv.brief.trim() !== "" && (
               <>
                 <h2 className="text-2xl font-semibold border-b border-gray-300 w-full">
@@ -221,6 +214,7 @@ export default function CVChat() {
               </>
             )}
 
+            {/* CV Professional Skills */}
             <h2 className="text-2xl font-semibold border-b border-gray-300 w-full">
               Professional Skills
             </h2>
@@ -239,6 +233,7 @@ export default function CVChat() {
               </ul>
             </div>
 
+            {/* CV Languages */}
             {draft.cv.languages.length > 0 && (
               <>
                 <h2 className="text-2xl font-semibold border-b border-gray-300 w-full">
@@ -254,16 +249,14 @@ export default function CVChat() {
               </>
             )}
 
+                        {/* CV Relevant Projects */}
             {draft.cv.relevantProjects.length > 0 && (
               <>
                 <h2 className="text-2xl font-semibold border-b border-gray-300 w-full">
                   Relevant Projects
                 </h2>
                 {draft.cv.relevantProjects.map((proj, idx) => (
-                  <table
-                    className="mb-6 w-full border border-gray-300"
-                    key={idx}
-                  >
+                  <table className="mb-6 w-full border border-gray-300" key={idx}>
                     <tbody>
                       {proj.businessDomain && (
                         <tr>
@@ -311,6 +304,7 @@ export default function CVChat() {
               </>
             )}
 
+            {/* CV Hobbies */}
             {draft.cv.hobbies.length > 0 && (
               <>
                 <h2 className="text-2xl font-semibold border-b border-gray-300 w-full">
@@ -335,8 +329,9 @@ export default function CVChat() {
         )}
       </main>
 
+      {/* Feedback/Input Section */}
       <div
-        className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl flex gap-2 bg-white/30 backdrop-blur-md ring rounded-full shadow-md p-2 transition-all ${
+        className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl flex gap-2 bg-white/10 backdrop-blur-md ring rounded-full shadow-md p-2 transition-all ${
           isInputFocused ? "ring-2 ring-blue-500" : "ring ring-gray-300"
         }`}
       >
@@ -370,11 +365,12 @@ export default function CVChat() {
               ? "Submitting..."
               : "Send"
             : startDraftMutation.isPending
-              ? "Searching..."
-              : "Start Draft"}
+            ? "Searching..."
+            : "Start Draft"}
         </Button>
       </div>
 
+      {/* Reset FAB & Export CV */}
       <div className="fixed flex flex-col justify-end bottom-20 right-6 gap-3">
         <ExportCVDraft draft={draft!} />
         {showResetButton && (
@@ -391,6 +387,7 @@ export default function CVChat() {
         )}
       </div>
 
+      {/* Reset Confirmation Modal */}
       <Dialog open={isResetModalOpen} onOpenChange={setIsResetModalOpen}>
         <DialogContent className="max-w-sm">
           <DialogHeader>

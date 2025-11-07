@@ -40,16 +40,17 @@ export interface CVDraft {
   feedback: string[];
 }
 
-
 export const startDraftAPI = async (query: string) => {
   const res = await fetch(`${API_URL}/cv/start/${encodeURIComponent(query)}`, {
     method: "POST",
   });
+
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.detail || "Employee not found");
   }
-  return res.json();
+
+  return await res.json(); // Returning the entire response
 };
 
 export const submitFeedbackAPI = async (employee_id: string, feedback: string) => {
@@ -58,20 +59,24 @@ export const submitFeedbackAPI = async (employee_id: string, feedback: string) =
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ employee_id, feedback }),
   });
+
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.detail || "Failed to submit feedback");
   }
-  return res.json();
+
+  return await res.json(); // Returning the response with the updated draft
 };
 
 export const resetFromFaissAPI = async (employee_id: string) => {
   const res = await fetch(`${API_URL}/cv/start/${encodeURIComponent(employee_id)}`, {
     method: "POST",
   });
+
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.detail || "Failed to reload draft");
   }
-  return res.json();
+
+  return await res.json(); // Returning the fresh draft data
 };

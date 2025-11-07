@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Card } from "@/components/ui/card";
 import { ResumeUpload } from "@/components/resume-upload";
 import { JobDescriptionInput } from "./JobDescriptionInput";
-import { ExportDocument } from "./ExportDocument";
 import { ShowJobDescription } from "./ShowJobDescription";
 import {
   Form,
@@ -554,17 +553,6 @@ export default function ResumeTailoringTool() {
           </div>
 
           <div className="space-y-8">
-            <ExportDocument
-              formData={form.getValues()}
-              contactName={
-                form.getValues("personalInformation.fullName") || "Resume"
-              }
-              jobTitle={
-                jobRequirements?.title ||
-                form.getValues("personalInformation.position") ||
-                "Position"
-              }
-            />
             <Accordion
               type="single"
               collapsible
@@ -587,11 +575,6 @@ export default function ResumeTailoringTool() {
                 onUpload={handleResumeUpload}
                 isProcessing={isProcessing}
                 hasResume={!!originalCV}
-              />
-              <JobDescriptionInput
-                isProcessing={isProcessing}
-                hasJobDescription={!!jobRequirements}
-                className="mt-6"
               />
               <ShowJobDescription
                 jobDescription={jobRequirements?.title || ""}
