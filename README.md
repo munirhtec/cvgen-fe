@@ -1,87 +1,49 @@
-# Welcome to React Router!
+# CV HTEC AI Assistant
 
-A modern, production-ready template for building full-stack React applications using React Router.
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Overview
+The **CV HTEC AI Assistant** provides an intuitive interface for generating, analyzing, and reviewing employee CVs with AI assistance. It allows users to input job descriptions either by pasting text or providing a URL, then generates suggestions and matches with potential candidates.
 
 ## Features
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+### 1. **Job Description Analyzer**
+   - **Tabs for Input Type**: Users can either paste a job description or provide a job URL.
+   - **Job Description Analysis**: Analyzes the input to suggest the best candidate matches based on the job description.
+   - **Dynamic Button Text**: Button text changes based on input type and loading state (e.g., "Analyze Job Description" or "Analyze from URL").
+   
+### 2. **Candidate Matching**
+   - **Results Display**: Shows a list of candidates with their full name, email, current role, business context, and similarity percentage.
+   - **Similarity Rating**: Candidates are rated with labels like "Elite", "Excellent", etc., based on their match percentage to the job description.
+   - **Detailed View**: Clicking a candidate reveals more details like personal information and skills.
 
-## Getting Started
+### 3. **CV Generation and Feedback**
+   - **Draft CV Creation**: Generate a CV draft based on a user query or feedback.
+   - **Feedback Mechanism**: Allows users to add feedback for improving the generated CV.
+   - **Reset Option**: Reset the draft from a previous session or re-fetch data from a backend system.
+   - **Export CV**: Users can export the generated CV to different formats.
 
-### Installation
+### 4. **Interactive Elements**
+   - **Popover for Feedback**: Displays a list of feedback on the side for quick reference.
+   - **Modals for Confirmation**: Includes modals for resetting or discarding drafts.
 
-Install the dependencies:
+## Components
+- **JobDescriptionForm**: A form to submit and switch between the description and URL inputs for job analysis.
+- **JobResults**: Displays the matching candidates and their details based on job description analysis.
+- **CVChat**: Manages CV creation, feedback, and resetting functionality.
 
-```bash
-npm install
-```
+## Technologies Used
+- React, TypeScript, Tailwind CSS
+- UI components from `@/components/ui`
+- Fetching API data with `fetch` and React Query
+- Toast notifications using `sonner`
+- State management with React's `useState` and `useEffect`
 
-### Development
+## Setup
+1. Clone the repository.
+2. Install dependencies:  
+   `npm install`
+3. Set up environment variables, including `VITE_API_URL` for the backend API.
+4. Run the app:  
+   `npm run dev`
 
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+## License
+MIT License
