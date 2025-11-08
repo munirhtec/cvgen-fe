@@ -44,7 +44,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <main className="mx-auto pt-12">{children}</main>
           <ScrollRestoration />
           <Scripts />
-          <Toaster position="top-right" />
+          <Toaster position="top-right" richColors />
         </QueryClientProvider>
       </body>
     </html>

@@ -12,7 +12,7 @@ export function Logo() {
       <div className="flex items-center space-x-3 text-gray-800 transition-colors duration-300">
         <FileUser className="w-7 h-7" />
         <div className="flex flex-col leading-tight">
-          <span className="text-md tracking-wide leading-none font-semibold">
+          <span className="text-lg tracking-wide leading-none font-semibold">
             Engineer CV Generator
           </span>
           <span className="flex items-center text-xs tracking-wide leading-none mt-0.5 text-gray-400">

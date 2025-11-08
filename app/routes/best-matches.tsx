@@ -91,7 +91,7 @@ const JobDescriptionForm: React.FC<JobDescriptionFormProps> = ({
         ? "Analyzing..."
         : tab === "description"
           ? hasJobDescription
-            ? "Update Job Description"
+            ? "Analyze Job Description"
             : "Analyze Job Description"
           : "Analyze from URL"}
     </Button>
@@ -251,9 +251,10 @@ export default function JobPage() {
 
   return (
     <div className="min-h-screen py-12 bg-gray-50">
-      <h1 className="text-3xl font-bold text-center mb-8">
-        Job Description Analyzer
+      <h1 className="text-3xl font-bold text-center">
+        Best Matches
       </h1>
+      <p className="text-center mb-8 text-gray-400">Find best candidates based on job description</p>
       <JobDescriptionForm
         tab={tab}
         setTab={setTab}

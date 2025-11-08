@@ -10,7 +10,7 @@
 
 html,
 body {
-  @apply bg-gray-100 dark:bg-gray-950;
+  @apply bg-slate-100;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
