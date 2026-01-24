@@ -17,7 +17,6 @@ import { MobileMenu } from "./MobileMenu";
 import { Link } from "react-router";
 
 const navLinks = [
-  { label: "Chat", href: "/chat" },
   { label: "Best candidates", href: "/best-matches" },
 ];
 
