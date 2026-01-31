@@ -16,9 +16,7 @@ import { LinkButton } from "./LinkButton";
 import { MobileMenu } from "./MobileMenu";
 import { Link } from "react-router";
 
-const navLinks = [
-  { label: "Best candidates", href: "/best-matches" },
-];
+const navLinks = [{ label: "Best candidates", href: "/best-matches" }];
 
 export function Navbar() {
   const [isMobile, setIsMobile] = useState(false);
@@ -39,7 +37,7 @@ export function Navbar() {
     <header
       ref={containerRef}
       className={cn(
-        "fixed top-0 z-50 w-full border-b bg-background/30 shadow-md backdrop-blur supports-[backdrop-filter]:bg-background/30 px-4 md:px-8"
+        "fixed top-0 z-50 w-full border-b bg-background/30 shadow-md backdrop-blur supports-[backdrop-filter]:bg-background/30 px-4 md:px-8",
       )}
     >
       <div className="container mx-auto flex h-14 max-w-screen-2xl items-center justify-between gap-4">
@@ -48,6 +46,9 @@ export function Navbar() {
           <Link to="/" className="flex items-center gap-2">
             <Logo />
           </Link>
+        </div>
+
+        <div className="flex items-center gap-3">
           {!isMobile && (
             <NavigationMenu>
               <NavigationMenuList className="flex gap-2">
@@ -59,7 +60,7 @@ export function Navbar() {
                         className={cn(
                           "text-foreground/80 px-4 py-2 rounded-md text-sm font-medium transition-colors",
                           "hover:bg-accent hover:text-accent-foreground",
-                          "focus:bg-accent focus:text-accent-foreground focus:outline-none"
+                          "focus:bg-accent focus:text-accent-foreground focus:outline-none",
                         )}
                       >
                         {label}
@@ -72,14 +73,12 @@ export function Navbar() {
           )}
         </div>
 
-        <div className="flex items-center gap-3"></div>
-
         {isMobile && (
           <Popover>
             <PopoverTrigger asChild>
               <button
                 className={cn(
-                  "h-9 w-9 rounded-md text-foreground/80 hover:bg-accent hover:text-accent-foreground transition-colors"
+                  "h-9 w-9 rounded-md text-foreground/80 hover:bg-accent hover:text-accent-foreground transition-colors",
                 )}
               >
                 ☰
@@ -94,7 +93,7 @@ export function Navbar() {
                         href={href}
                         className={cn(
                           "block w-full rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition-colors",
-                          "hover:bg-accent hover:text-accent-foreground"
+                          "hover:bg-accent hover:text-accent-foreground",
                         )}
                       >
                         {label}

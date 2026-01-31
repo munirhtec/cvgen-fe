@@ -72,8 +72,13 @@ export default function CVChat() {
   });
 
   const submitFeedbackMutation = useMutation({
-    mutationFn: ({ employee_id, feedback }: { employee_id: string; feedback: string }) =>
-      submitFeedbackAPI(employee_id, feedback),
+    mutationFn: ({
+      employee_id,
+      feedback,
+    }: {
+      employee_id: string;
+      feedback: string;
+    }) => submitFeedbackAPI(employee_id, feedback),
     onSuccess: (data) => {
       setDraft(data.draft);
       setFeedbackInput("");
@@ -141,7 +146,10 @@ export default function CVChat() {
             <PopoverContent className="w-64 p-2 text-sm">
               <ul className="space-y-1 text-gray-700 max-h-48 overflow-y-auto">
                 {draft.feedbackHistory.map((fb, i) => (
-                  <li key={i} className="border-b border-gray-100 pb-1 last:border-0">
+                  <li
+                    key={i}
+                    className="border-b border-gray-100 pb-1 last:border-0"
+                  >
                     {fb}
                   </li>
                 ))}
@@ -180,19 +188,24 @@ export default function CVChat() {
               Personal Information
             </h2>
             <div className="flex flex-col gap-2">
-              {[{
-                label: "Full Name:",
-                value: draft.cv.personalInformation.fullName,
-              }, {
-                label: "Position:",
-                value: draft.cv.personalInformation.position.join(", "),
-              }, {
-                label: "Email:",
-                value: draft.cv.personalInformation.email,
-              }, {
-                label: "Education:",
-                value: draft.cv.personalInformation.education,
-              }]
+              {[
+                {
+                  label: "Full Name:",
+                  value: draft.cv.personalInformation.fullName,
+                },
+                {
+                  label: "Position:",
+                  value: draft.cv.personalInformation.position.join(", "),
+                },
+                {
+                  label: "Email:",
+                  value: draft.cv.personalInformation.email,
+                },
+                {
+                  label: "Education:",
+                  value: draft.cv.personalInformation.education,
+                },
+              ]
                 .filter(({ value }) => value && value.trim() !== "")
                 .map(({ label, value }) => (
                   <div key={label} className="flex">
@@ -250,7 +263,10 @@ export default function CVChat() {
                   Relevant Projects
                 </h2>
                 {draft.cv.relevantProjects.map((proj, idx) => (
-                  <table className="mb-6 w-full border border-gray-300" key={idx}>
+                  <table
+                    className="mb-6 w-full border border-gray-300"
+                    key={idx}
+                  >
                     <tbody>
                       {proj.businessDomain && (
                         <tr>
@@ -351,14 +367,17 @@ export default function CVChat() {
             startDraftMutation.isPending ||
             submitFeedbackMutation.isPending
           }
+          isLoading={
+            startDraftMutation.isPending || submitFeedbackMutation.isPending
+          }
         >
           {draft
             ? submitFeedbackMutation.isPending
               ? "Submitting..."
               : "Send"
             : startDraftMutation.isPending
-            ? "Searching..."
-            : "Start Draft"}
+              ? "Searching..."
+              : "Start Draft"}
         </Button>
       </div>
 
