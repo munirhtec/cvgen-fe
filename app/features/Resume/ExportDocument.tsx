@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { renderToString } from "react-dom/server";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import type { CVDraft } from "@/lib/cv";
+import type { CVDraft } from "@/lib/api";
 import { HtecLogo } from "../Navbar/HtecLogo";
 
 function PrintableCVDraft({ draft }: { draft: CVDraft }) {

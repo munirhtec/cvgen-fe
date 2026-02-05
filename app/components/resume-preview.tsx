@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import type { ResumeData, TailoredContent } from "@/app/page"
+import type { ResumeData, TailoredContent } from "@/types/resume"
 import { Plus, Minus, Edit } from "lucide-react"
 
 interface ResumePreviewProps {

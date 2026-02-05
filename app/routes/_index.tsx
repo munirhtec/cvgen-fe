@@ -18,11 +18,9 @@ import {
 import { toast } from "sonner";
 import { RotateCcw, X, ChevronDown } from "lucide-react";
 import {
-  startDraftAPI,
-  submitFeedbackAPI,
-  resetFromFaissAPI,
+  cv,
   type CVDraft,
-} from "@/lib/cv";
+} from "@/lib/api";
 import { ExportCVDraft } from "@/features/Resume/ExportDocument";
 import { HtecLogo } from "@/features/Navbar/HtecLogo";
 
@@ -61,12 +59,13 @@ export default function CVChat() {
   }, [employeeId]);
 
   const startDraftMutation = useMutation({
-    mutationFn: (query: string) => startDraftAPI(query),
+    mutationFn: (query: string) => cv.start(query),
     onSuccess: (data) => {
       setEmployeeId(data.employee_id);
       setDraft(data.draft);
       setQuery("");
-      toast.success(data.message);
+      // Show that CV went through 3-agent pipeline
+      toast.success("✅ CV generated through 3-agent pipeline (draft → review → refine)");
     },
     onError: (err: Error) => toast.error(err.message),
   });
@@ -78,7 +77,7 @@ export default function CVChat() {
     }: {
       employee_id: string;
       feedback: string;
-    }) => submitFeedbackAPI(employee_id, feedback),
+    }) => cv.submitFeedback(employee_id, feedback),
     onSuccess: (data) => {
       setDraft(data.draft);
       setFeedbackInput("");
@@ -88,7 +87,7 @@ export default function CVChat() {
   });
 
   const resetFromFaissMutation = useMutation({
-    mutationFn: (employee_id: string) => resetFromFaissAPI(employee_id),
+    mutationFn: (employee_id: string) => cv.start(employee_id),
     onSuccess: (data) => {
       setDraft(data.draft);
       setEmployeeId(data.employee_id);
@@ -339,9 +338,8 @@ export default function CVChat() {
       </main>
 
       <div
-        className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl flex gap-2 bg-white/10 backdrop-blur-md ring rounded-full shadow-md p-2 transition-all ${
-          isInputFocused ? "ring-2 ring-blue-500" : "ring ring-gray-300"
-        }`}
+        className={`fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl flex gap-2 bg-white/10 backdrop-blur-md ring rounded-full shadow-md p-2 transition-all ${isInputFocused ? "ring-2 ring-blue-500" : "ring ring-gray-300"
+          }`}
       >
         <Input
           autoFocus
@@ -376,8 +374,8 @@ export default function CVChat() {
               ? "Submitting..."
               : "Send"
             : startDraftMutation.isPending
-              ? "Searching..."
-              : "Start Draft"}
+              ? "Generating CV..."
+              : "Generate CV"}
         </Button>
       </div>
 

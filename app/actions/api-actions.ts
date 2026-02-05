@@ -1,20 +1,12 @@
 "use server";
 
-const API_URL = import.meta.env.VITE_API_URL;
+import { helpers } from "@/lib/api";
 
 export async function ask(question: string) {
-  const res = await fetch(`${API_URL}/llm/ask`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ question }),
-  });
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
+  try {
+    const data = await helpers.ask(question);
+    return data;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch: ${error.message}`);
   }
-
-  const data = await res.json();
-  return data;
 }

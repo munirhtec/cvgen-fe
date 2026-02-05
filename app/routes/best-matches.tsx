@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { helpers, rag } from "@/lib/api";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,7 @@ export function meta() {
 
 interface CandidateResponse {
   record: {
-    employee_id?: string;
+    employee_id?: string | number;
     full_name: string;
     email: string;
     current_role: string;
@@ -192,6 +193,7 @@ export default function JobPage() {
     setLoading(true);
 
     try {
+
       let descriptionToAnalyze = jobDescription;
 
       if (tab === "url") {
@@ -201,18 +203,15 @@ export default function JobPage() {
           return;
         }
 
-        const helperResponse = await fetch(
-          `${import.meta.env.VITE_API_URL}/helpers/extract-jd?url=${encodeURIComponent(jobUrl)}`
-        );
-        if (!helperResponse.ok)
-          throw new Error(
-            `Failed to fetch JD from URL (HTTP ${helperResponse.status})`
-          );
-        const helperData = await helperResponse.json();
-        if (!helperData?.job_description)
-          throw new Error("No job description found for this URL.");
-        descriptionToAnalyze = helperData.job_description;
-        setJobDescription(descriptionToAnalyze);
+        try {
+          const helperData = await helpers.extractJD(jobUrl);
+          if (!helperData?.job_description)
+            throw new Error("No job description found for this URL.");
+          descriptionToAnalyze = helperData.job_description;
+          setJobDescription(descriptionToAnalyze);
+        } catch (err: any) {
+          throw new Error(`Failed to fetch JD from URL: ${err.message}`);
+        }
       }
 
       if (!descriptionToAnalyze.trim()) {
@@ -221,22 +220,7 @@ export default function JobPage() {
         return;
       }
 
-      const suggestionResponse = await fetch(
-        `${import.meta.env.VITE_API_URL}/rag/suggestions`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            job_description: descriptionToAnalyze,
-            top_k: 5,
-          }),
-        }
-      );
-      if (!suggestionResponse.ok)
-        throw new Error(
-          `Failed to get suggestions (HTTP ${suggestionResponse.status})`
-        );
-      const data = await suggestionResponse.json();
+      const data = await rag.getSuggestions(descriptionToAnalyze, 5);
       const parsedResults: CandidateResponse[] = Array.isArray(data)
         ? data
         : data.suggestions || [];

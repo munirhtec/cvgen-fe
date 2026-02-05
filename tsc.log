@@ -1,0 +1,20 @@
+app/components/export-options.tsx(4,38): error TS2307: Cannot find module '@/app/page' or its corresponding type declarations.
+app/components/resume-preview.tsx(3,50): error TS2307: Cannot find module '@/app/page' or its corresponding type declarations.
+app/components/resume-preview.tsx(56,33): error TS7006: Parameter 'skill' implicitly has an 'any' type.
+app/components/resume-preview.tsx(56,40): error TS7006: Parameter 'index' implicitly has an 'any' type.
+app/components/resume-preview.tsx(104,35): error TS7006: Parameter 'exp' implicitly has an 'any' type.
+app/components/resume-preview.tsx(104,40): error TS7006: Parameter 'index' implicitly has an 'any' type.
+app/components/resume-preview.tsx(114,35): error TS7006: Parameter 'bullet' implicitly has an 'any' type.
+app/components/resume-preview.tsx(114,43): error TS7006: Parameter 'bulletIndex' implicitly has an 'any' type.
+app/components/resume-preview.tsx(132,34): error TS7006: Parameter 'edu' implicitly has an 'any' type.
+app/components/resume-preview.tsx(132,39): error TS7006: Parameter 'index' implicitly has an 'any' type.
+app/features/Resume/ExportDocument.tsx(5,30): error TS2307: Cannot find module '@/lib/cv' or its corresponding type declarations.
+app/features/Resume/ExportDocument.tsx(70,53): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/features/Resume/ExportDocument.tsx(70,56): error TS7006: Parameter 'i' implicitly has an 'any' type.
+app/features/Resume/ExportDocument.tsx(76,58): error TS7006: Parameter 's' implicitly has an 'any' type.
+app/features/Resume/ExportDocument.tsx(76,61): error TS7006: Parameter 'i' implicitly has an 'any' type.
+app/features/Resume/ExportDocument.tsx(88,32): error TS7006: Parameter 'l' implicitly has an 'any' type.
+app/features/Resume/ExportDocument.tsx(88,35): error TS7006: Parameter 'i' implicitly has an 'any' type.
+app/features/Resume/ExportDocument.tsx(167,30): error TS7006: Parameter 'h' implicitly has an 'any' type.
+app/features/Resume/ExportDocument.tsx(167,33): error TS7006: Parameter 'i' implicitly has an 'any' type.
+app/lib/api.ts(138,32): error TS2552: Cannot find name 'employee_id'. Did you mean 'employeeId'?

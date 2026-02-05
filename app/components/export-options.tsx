@@ -1,7 +1,8 @@
+
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import type { TailoredContent } from "@/app/page"
+import type { TailoredContent } from "@/types/resume"
 import { Download, FileText, Mail } from "lucide-react"
 import { toast } from "sonner"
 
@@ -32,7 +33,7 @@ export function ExportOptions({ tailoredContent, jobTitle }: ExportOptionsProps)
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement("a")
       a.href = url
-      a.download = `${type === "both" ? "tailored-documents" : type}-${jobTitle.replace(/\s+/g, "-").toLowerCase()}.pdf`
+      a.download = `${type === "both" ? "tailored-documents" : type} -${jobTitle.replace(/\s+/g, "-").toLowerCase()}.pdf`
       document.body.appendChild(a)
       a.click()
       window.URL.revokeObjectURL(url)
