@@ -50,6 +50,7 @@ export default function CVChat() {
   const [resetMode, setResetMode] = useState<"fab" | "close" | null>(null);
   const [modalLoading, setModalLoading] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [pipelineMessages, setPipelineMessages] = useState<string[]>([]);
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -59,7 +60,10 @@ export default function CVChat() {
   }, [employeeId]);
 
   const startDraftMutation = useMutation({
-    mutationFn: (query: string) => cv.start(query),
+    mutationFn: (query: string) => {
+      setPipelineMessages([]);
+      return cv.start(query, (msg) => setPipelineMessages((prev) => [...prev, msg]));
+    },
     onSuccess: (data) => {
       setEmployeeId(data.employee_id);
       setDraft(data.draft);
@@ -77,7 +81,10 @@ export default function CVChat() {
     }: {
       employee_id: string;
       feedback: string;
-    }) => cv.submitFeedback(employee_id, feedback),
+    }) => {
+      setPipelineMessages([]);
+      return cv.submitFeedback(employee_id, feedback, (msg) => setPipelineMessages((prev) => [...prev, msg]));
+    },
     onSuccess: (data) => {
       setDraft(data.draft);
       setFeedbackInput("");
@@ -124,6 +131,7 @@ export default function CVChat() {
       setEmployeeId(null);
       setQuery("");
       setFeedbackInput("");
+      setPipelineMessages([]);
       setIsResetModalOpen(false);
       setResetMode(null);
     }
@@ -158,9 +166,22 @@ export default function CVChat() {
         </div>
       )}
 
-      <main className="flex-1 w-full py-8">
-        {draft ? (
-          <div className="relative bg-white max-w-5xl mx-auto border border-gray-100 shadow-xl p-6 space-y-6">
+      <main className="flex-1 w-full flex flex-col items-center py-8">
+        {(startDraftMutation.isPending || submitFeedbackMutation.isPending) && pipelineMessages.length > 0 && (
+          <div className="bg-white max-w-2xl w-full mx-auto border border-blue-100 shadow-md p-4 rounded-xl mb-6 flex flex-col space-y-2">
+            <h3 className="font-semibold text-blue-800 flex items-center gap-2">
+              <span className="animate-spin text-xl">⚙️</span> Pipeline Active...
+            </h3>
+            <div className="text-sm font-mono bg-slate-50 p-3 rounded h-40 overflow-y-auto flex flex-col gap-1 border border-slate-100">
+              {pipelineMessages.map((msg, i) => (
+                <div key={i} className="text-slate-600 border-b border-slate-100 pb-1 break-words">{msg}</div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!startDraftMutation.isPending && !submitFeedbackMutation.isPending && draft ? (
+          <div className="relative w-full bg-white max-w-5xl mx-auto border border-gray-100 shadow-xl p-6 space-y-6">
             <Button
               variant="ghost"
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
@@ -330,11 +351,11 @@ export default function CVChat() {
               Generated using CVGen, AI CV Assistant from HTEC
             </div>
           </div>
-        ) : (
-          <div className="text-center text-gray-400 mt-20 text-sm">
+        ) : !startDraftMutation.isPending ? (
+          <div className="text-center text-gray-400 mt-20 text-sm flex-1">
             Start by searching for an employee...
           </div>
-        )}
+        ) : null}
       </main>
 
       <div

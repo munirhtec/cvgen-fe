@@ -121,11 +121,47 @@ export const helpers = {
 };
 
 export const cv = {
-  start: (employeeQuery: string) =>
-    request<{ message: string; employee_id: string; draft: any }>(
-      `/cv/start/${encodeURIComponent(employeeQuery)}`,
-      { method: "POST" }
-    ),
+  start: async (
+    employeeQuery: string,
+    onMessage?: (msg: string) => void
+  ): Promise<{ message: string; employee_id: string; draft: any }> => {
+    const res = await fetch(`${API_URL}/cv/start/${encodeURIComponent(employeeQuery)}`, {
+      method: "POST",
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new ApiError(res.status, res.statusText, errorData.detail);
+    }
+
+    const reader = res.body?.getReader();
+    const decoder = new TextDecoder();
+    let result: any;
+
+    while (reader) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      const lines = chunk.split("\n").filter((l) => l.trim() !== "");
+      for (const line of lines) {
+        try {
+          const payload = JSON.parse(line);
+          if (payload.type === "message" && onMessage) {
+            onMessage(payload.data);
+          } else if (payload.type === "error") {
+             throw new Error(payload.message);
+          } else if (payload.type === "done") {
+            result = payload;
+          }
+        } catch (e) {
+          if (e instanceof Error && e.message !== "Unexpected end of JSON input") {
+             throw e;
+          }
+        }
+      }
+    }
+    return result;
+  },
 
   getDraft: (employeeId: string) =>
     request<{ draft: CVDraft }>(`/cv/draft/${employeeId}`),
@@ -136,14 +172,50 @@ export const cv = {
   refine: (employeeId: string) =>
     request<any>(`/cv/refine/${employeeId}`, { method: "POST" }),
 
-  submitFeedback: (employeeId: string, feedback: string) =>
-    request<{ success: boolean; message: string; draft: CVDraft }>(
-      "/cv/feedback",
-      {
-        method: "POST",
-        body: JSON.stringify({ employee_id: employeeId, feedback }),
+  submitFeedback: async (
+    employeeId: string, 
+    feedback: string,
+    onMessage?: (msg: string) => void
+  ): Promise<{ success: boolean; message: string; draft: CVDraft }> => {
+    const res = await fetch(`${API_URL}/cv/feedback`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ employee_id: employeeId, feedback }),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new ApiError(res.status, res.statusText, errorData.detail);
+    }
+
+    const reader = res.body?.getReader();
+    const decoder = new TextDecoder();
+    let result: any;
+
+    while (reader) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      const lines = chunk.split("\n").filter((l) => l.trim() !== "");
+      for (const line of lines) {
+        try {
+          const payload = JSON.parse(line);
+          if (payload.type === "message" && onMessage) {
+            onMessage(payload.data);
+          } else if (payload.type === "error") {
+            throw new Error(payload.message);
+          } else if (payload.type === "done") {
+            result = payload;
+          }
+        } catch (e) {
+           if (e instanceof Error && e.message !== "Unexpected end of JSON input") {
+             throw e;
+          }
+        }
       }
-    ),
+    }
+    return result;
+  },
 
   reset: (employeeId: string) =>
     request<{ success: boolean; message: string }>(`/cv/reset/${employeeId}`, {
